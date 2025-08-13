@@ -16,9 +16,10 @@ public static class Constants
 
     public const int MAX_POSITION_DESCRIPTION_LENGTH = 1000;
 
-    public const string IDENTIFIER_REGEX = "^[a-z]+$";
+    public const string IDENTIFIER_REGEX_PATTERN = @"^[a-z]+$";
 
-    public const string TIME_ZONE_REGEX =
-        "^(?:[A-Za-z0-9]+(?:[-_A-Za-z0-9+.]*[A-Za-z0-9])?)(?:/(?:[A-Za-z0-9]+(?:[-_A-Za-z0-9+.]*[A-Za-z0-9])?))*$";
+    public const string TIME_ZONE_REGEX_PATTERN =
+        @"^(?:[A-Za-z0-9]+(?:[-_A-Za-z0-9+.]*[A-Za-z0-9])?)(?:/(?:[A-Za-z0-9]+(?:[-_A-Za-z0-9+.]*[A-Za-z0-9])?))*$";
 
+    public static string DEPARTMENT_PATH_REGEX_PATTERN = @"^(?!\.)([a-z0-9_-]+)(\.[a-z0-9_-]+)*$";
 }

@@ -16,7 +16,7 @@ public record DepartmentIdentifier
     public static Result<DepartmentIdentifier> Create(string identifier)
     {
         if(string.IsNullOrWhiteSpace(identifier) ||
-           !Regex.IsMatch(identifier, Constants.IDENTIFIER_REGEX))
+           !Regex.IsMatch(identifier, Constants.IDENTIFIER_REGEX_PATTERN))
             return Result.Failure<DepartmentIdentifier>("Invalid identifier.");
 
         return Result.Success(new DepartmentIdentifier(identifier));

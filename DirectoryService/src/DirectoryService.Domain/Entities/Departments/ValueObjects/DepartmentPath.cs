@@ -1,4 +1,6 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Text.RegularExpressions;
+using CSharpFunctionalExtensions;
+using DirectoryService.Domain.Shared;
 
 namespace DirectoryService.Domain.Entities.Departments.ValueObjects
 {
@@ -13,8 +15,9 @@ namespace DirectoryService.Domain.Entities.Departments.ValueObjects
 
         public static Result<DepartmentPath> Create(string path)
         {
-            if (string.IsNullOrWhiteSpace(path) || path.Length < 1 || path.Length > 255)
-                return Result.Failure<DepartmentPath>("Path should not be empty or white space and must be between 1 and 255 characters.");
+            if (string.IsNullOrWhiteSpace(path) ||
+                !Regex.IsMatch(path, Constants.DEPARTMENT_PATH_REGEX_PATTERN))
+                return Result.Failure<DepartmentPath>("Incorrect path format.");
             return Result.Success(new DepartmentPath(path));
         }
     }
