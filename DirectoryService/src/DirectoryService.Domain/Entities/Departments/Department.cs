@@ -13,8 +13,7 @@ public class Department
         DepartmentPath path,
         short debth,
         int childerCount,
-        DateTime createAt,
-        DateTime updateAt)
+        DateTime createAt)
     {
         Name = name;
         Identifier = identifier;
@@ -23,7 +22,6 @@ public class Department
         Depth = debth;
         ChildrenCount = childerCount;
         CreatedAt = createAt;
-        UpdatedAt = updateAt;
     }
 
     private Department() { }

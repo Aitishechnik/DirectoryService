@@ -14,7 +14,6 @@ public class Position
         Description = description;
         IsActive = isActive;
         CreatedAt = DateTime.UtcNow;
-        UpdatedAt = DateTime.UtcNow;
     }
 
     private Position() { }
@@ -29,7 +28,7 @@ public class Position
 
     private List<Department> _departments = [];
 
-    public bool IsActive { get; private set; }
+    public bool IsActive { get; private set; } = true;
 
     public DateTime CreatedAt { get; private set; }
 

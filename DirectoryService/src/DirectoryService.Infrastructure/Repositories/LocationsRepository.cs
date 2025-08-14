@@ -1,0 +1,49 @@
+﻿using DirectoryService.Application.Locations;
+using DirectoryService.Domain.Entities.Locations;
+using DirectoryService.Infrastructure.DbContexts;
+using Microsoft.EntityFrameworkCore;
+
+namespace DirectoryService.Infrastructure.Repositories
+{
+    public class LocationsRepository : ILocationRepository
+    {
+        private readonly DirectoryServiceDbContext _dbContext;
+
+        public LocationsRepository(DirectoryServiceDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+        public async Task AddAsync(
+            Location location,
+            CancellationToken cancellationToken)
+        {
+            await _dbContext.Locations.AddAsync(location, cancellationToken);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task<bool> IsLocationAddressExistsAsync(
+            string state,
+            string city,
+            string address,
+            CancellationToken cancellationToken)
+        {
+            return await _dbContext.Locations
+                .AnyAsync(
+                    l => l.Address.State == state &&
+                        l.Address.City == city &&
+                        l.Address.Address == address,
+                    cancellationToken);
+        }
+
+        public async Task<bool> IsLocationNameAvailibleAsync(
+            string locationName,
+            CancellationToken cancellationToken)
+        {
+            return await _dbContext.Locations
+                .AllAsync(
+                    l => l.Name.Name != locationName,
+                    cancellationToken);
+        }
+    }
+}
