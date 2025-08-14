@@ -1,5 +1,4 @@
 ﻿using DirectoryService.Domain.Entities.Departments.ValueObjects;
-using DirectoryService.Domain.Entities.Location;
 using DirectoryService.Domain.Entities.Locations;
 using DirectoryService.Domain.Entities.Positions;
 

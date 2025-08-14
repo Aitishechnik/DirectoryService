@@ -6,12 +6,12 @@ namespace DirectoryService.Domain.Entities.Departments.ValueObjects;
 
 public record DepartmentIdentifier
 {
-    private DepartmentIdentifier(string id)
+    private DepartmentIdentifier(string identifier)
     {
-        Value = id;
+        Identifier = identifier;
     }
 
-    public string Value { get; }
+    public string Identifier { get; }
 
     public static Result<DepartmentIdentifier> Create(string identifier)
     {

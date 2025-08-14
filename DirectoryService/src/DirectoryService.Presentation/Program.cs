@@ -1,9 +1,14 @@
+﻿using DirectoryService.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped(_ =>
+    new DirectoryServiceDbContext(
+        builder.Configuration.GetConnectionString("Database")!));
 
 var app = builder.Build();
 

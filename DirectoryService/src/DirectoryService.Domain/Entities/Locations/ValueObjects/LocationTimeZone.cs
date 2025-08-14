@@ -8,10 +8,10 @@ namespace DirectoryService.Domain.Entities.Locations.ValueObjects
     {
         private LocationTimeZone(string timeZone)
         {
-            Value = timeZone;
+            TimeZone = timeZone;
         }
 
-        public string Value { get; }
+        public string TimeZone { get; }
 
         public static Result<LocationTimeZone> Create(string timeZone)
         {

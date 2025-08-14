@@ -14,6 +14,10 @@ public static class Constants
     public const int MIN_IDENTIFIER_LENGTH = 3;
     public const int MAX_IDENTIFIER_LENGTH = 150;
 
+    public const int MAX_STATE_LENGTH = 100;
+    public const int MAX_CITY_LENGTH = 200;
+    public const int MAX_ADDRESS_LENGTH = 200;
+
     public const int MAX_POSITION_DESCRIPTION_LENGTH = 1000;
 
     public const string IDENTIFIER_REGEX_PATTERN = @"^[a-z]+$";
