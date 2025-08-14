@@ -7,10 +7,10 @@ namespace DirectoryService.Domain.Entities.Locations.ValueObjects
     {
         private LocationName(string name)
         {
-            Value = name;
+            Name = name;
         }
 
-        public string Value { get; }
+        public string Name { get; }
 
         public static Result<LocationName> Create(string name)
         {

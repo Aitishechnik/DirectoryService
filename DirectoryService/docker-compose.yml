@@ -1,0 +1,16 @@
+﻿services:
+  test_web_app:
+    image: postgres:latest
+    container_name: postgres_directory_service_container
+    restart: always
+    environment:
+      POSTGRES_DB: reservation_service_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5436:5432"
+    volumes:
+      - pg_data_directory_service:/var/lib/postgresql/data
+
+volumes:
+  pg_data_directory_service:

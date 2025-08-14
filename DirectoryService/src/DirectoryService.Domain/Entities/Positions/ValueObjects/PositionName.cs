@@ -7,10 +7,10 @@ namespace DirectoryService.Domain.Entities.Positions.ValueObjects
     {
         private PositionName(string name)
         {
-            Value = name;
+            Name = name;
         }
 
-        public string Value { get; }
+        public string Name { get; }
 
         public static Result<PositionName> Create(string name)
         {

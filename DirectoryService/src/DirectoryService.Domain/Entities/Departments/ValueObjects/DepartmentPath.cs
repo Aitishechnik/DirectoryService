@@ -6,12 +6,12 @@ namespace DirectoryService.Domain.Entities.Departments.ValueObjects
 {
     public class DepartmentPath
     {
-        private DepartmentPath(string value)
+        private DepartmentPath(string path)
         {
-            Value = value;
+            Path = path;
         }
 
-        public string Value { get; }
+        public string Path { get; }
 
         public static Result<DepartmentPath> Create(string path)
         {

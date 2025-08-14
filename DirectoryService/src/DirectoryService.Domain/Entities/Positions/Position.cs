@@ -5,9 +5,23 @@ namespace DirectoryService.Domain.Entities.Positions;
 
 public class Position
 {
-    public Guid Id { get; private set; }
+    public Position(
+        PositionName name,
+        PositionDescription? description,
+        bool isActive)
+    {
+        Name = name;
+        Description = description;
+        IsActive = isActive;
+        CreatedAt = DateTime.UtcNow;
+        UpdatedAt = DateTime.UtcNow;
+    }
 
-    public PositionName Name { get; private set; }
+    private Position() { }
+
+    public Guid Id { get; private set; } = default!;
+
+    public PositionName Name { get; private set; } = default!;
 
     public PositionDescription? Description { get; private set; }
 
@@ -21,15 +35,4 @@ public class Position
 
     public DateTime UpdatedAt { get; private set; }
 
-    public Position(
-        PositionName name,
-        PositionDescription? description,
-        bool isActive)
-    {
-        Name = name;
-        Description = description;
-        IsActive = isActive;
-        CreatedAt = DateTime.UtcNow;
-        UpdatedAt = DateTime.UtcNow;
-    }
 }
