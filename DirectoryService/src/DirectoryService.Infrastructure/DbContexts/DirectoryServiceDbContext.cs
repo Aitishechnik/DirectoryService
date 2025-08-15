@@ -4,13 +4,13 @@ using DirectoryService.Domain.Entities.Positions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace DirectoryService.Infrastructure
+namespace DirectoryService.Infrastructure.DbContexts
 {
     public class DirectoryServiceDbContext(string ConnectionString) : DbContext
     {
         public DbSet<Department> Departments => Set<Department>();
 
-        public DbSet<Location> Department => Set<Location>();
+        public DbSet<Location> Locations => Set<Location>();
 
         public DbSet<Position> Positions => Set<Position>();
 
