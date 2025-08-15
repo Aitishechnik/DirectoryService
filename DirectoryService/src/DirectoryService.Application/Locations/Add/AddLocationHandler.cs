@@ -38,13 +38,12 @@ namespace DirectoryService.Application.Locations.Add
                 return Result.Failure<Guid>("Command validation error.");
             }
 
-            var isLocationNameAvailable =
-                await _locationRepository
+            var isLocationNameAvailable = await _locationRepository
                 .IsLocationNameAvailibleAsync(
                     command.Name,
                     cancellationToken);
             if (!isLocationNameAvailable)
-                {
+            {
                 _logger.LogError(
                     "Location name '{LocationName}' is already taken.",
                     command.Name);
@@ -52,15 +51,14 @@ namespace DirectoryService.Application.Locations.Add
                     $"Location name '{command.Name}' is already taken.");
             }
 
-            var isLocationAddressExists =
-                await _locationRepository
+            var isLocationAddressExists = await _locationRepository
                 .IsLocationAddressExistsAsync(
                     command.LocationAddresDto.State,
                     command.LocationAddresDto.City,
                     command.LocationAddresDto.Address,
                     cancellationToken);
             if (isLocationAddressExists)
-                {
+            {
                 _logger.LogError(
                     "Location address '{State}, {City}, {Address}' already exists.",
                     command.LocationAddresDto.State,
@@ -79,8 +77,10 @@ namespace DirectoryService.Application.Locations.Add
                 LocationTimeZone.Create(command.TimeZone).Value,
                 DateTime.UtcNow);
 
-            await _locationRepository
+            var result = await _locationRepository
                 .AddAsync(location, cancellationToken);
+            if (result.IsFailure)
+                return Result.Failure<Guid>(result.Error);
 
             return location.Id;
         }

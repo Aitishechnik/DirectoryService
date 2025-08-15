@@ -1,4 +1,5 @@
-﻿using DirectoryService.Application.Locations;
+﻿using CSharpFunctionalExtensions;
+using DirectoryService.Application.Locations;
 using DirectoryService.Domain.Entities.Locations;
 using DirectoryService.Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore;
@@ -14,12 +15,22 @@ namespace DirectoryService.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task AddAsync(
+        public async Task<UnitResult<string>> AddAsync(
             Location location,
             CancellationToken cancellationToken)
         {
-            await _dbContext.Locations.AddAsync(location, cancellationToken);
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            try
+            {
+                await _dbContext.Locations.AddAsync(location, cancellationToken);
+                await _dbContext.SaveChangesAsync(cancellationToken);
+
+                return UnitResult.Success<string>();
+            }
+            catch (Exception ex)
+            {
+                return UnitResult.Failure(
+                    $"An error occurred while adding the location: {ex.Message}");
+            }
         }
 
         public async Task<bool> IsLocationAddressExistsAsync(
