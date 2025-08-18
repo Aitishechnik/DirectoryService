@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using DirectoryService.Domain.Shared;
 
 namespace DirectoryService.Domain.Entities.Locations.ValueObjects
 {
@@ -20,17 +21,17 @@ namespace DirectoryService.Domain.Entities.Locations.ValueObjects
 
         public string Address { get; }
 
-        public static Result<LocationAddress> Create(
+        public static Result<LocationAddress, Error> Create(
             string state,
             string city,
             string address)
         {
             if(string.IsNullOrWhiteSpace(address))
-                return Result.Failure<LocationAddress>($"{address} is not a valid address");
-            if(string.IsNullOrWhiteSpace(city))
-                return Result.Failure<LocationAddress>($"{city} is not a valid city");
-            if(string.IsNullOrWhiteSpace(state))
-                return Result.Failure<LocationAddress>($"{state} is not a valid state");
+                return GeneralErrors.ValueIsRequired("Address is empty");
+            if (string.IsNullOrWhiteSpace(city))
+                return GeneralErrors.ValueIsRequired("City is empty");
+            if (string.IsNullOrWhiteSpace(state))
+                return GeneralErrors.ValueIsRequired("State is empty");
 
             return new LocationAddress(state, city, address);
         }

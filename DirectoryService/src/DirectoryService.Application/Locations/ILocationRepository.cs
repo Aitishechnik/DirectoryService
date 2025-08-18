@@ -1,11 +1,12 @@
 ﻿using CSharpFunctionalExtensions;
 using DirectoryService.Domain.Entities.Locations;
+using DirectoryService.Domain.Shared;
 
 namespace DirectoryService.Application.Locations
 {
     public interface ILocationRepository
     {
-        Task<UnitResult<string>> AddAsync(Location location, CancellationToken cancellationToken);
+        Task<UnitResult<Error>> AddAsync(Location location, CancellationToken cancellationToken);
 
         Task<bool> IsLocationNameAvailibleAsync(
             string locationName,

@@ -13,12 +13,12 @@ public record DepartmentIdentifier
 
     public string Identifier { get; }
 
-    public static Result<DepartmentIdentifier> Create(string identifier)
+    public static Result<DepartmentIdentifier, Error> Create(string identifier)
     {
-        if(string.IsNullOrWhiteSpace(identifier) ||
+        if (string.IsNullOrWhiteSpace(identifier) ||
            !Regex.IsMatch(identifier, Constants.IDENTIFIER_REGEX_PATTERN))
-            return Result.Failure<DepartmentIdentifier>("Invalid identifier.");
+            return GeneralErrors.ValueIsInvalid("Department Identifier");
 
-        return Result.Success(new DepartmentIdentifier(identifier));
+        return new DepartmentIdentifier(identifier);
     }
 }

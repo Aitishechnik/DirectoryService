@@ -12,12 +12,12 @@ namespace DirectoryService.Domain.Entities.Locations.ValueObjects
 
         public string Name { get; }
 
-        public static Result<LocationName> Create(string name)
+        public static Result<LocationName, Error> Create(string name)
         {
             if (string.IsNullOrWhiteSpace(name) ||
                 name.Length < Constants.MIN_LOCATION_NAME_LENGTH ||
                 name.Length > Constants.MAX_LOCATION_NAME_LENGTH)
-                return Result.Failure<LocationName>("Name is empty.");
+                return GeneralErrors.ValueIsInvalid("Location name is invalid");
 
             return new LocationName(name);
         }

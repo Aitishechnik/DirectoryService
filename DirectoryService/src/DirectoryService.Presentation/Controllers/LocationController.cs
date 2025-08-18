@@ -1,4 +1,5 @@
 ﻿using DirectoryService.Application.Locations.Add;
+using DirectoryService.Presentation.EndpointResults;
 using DirectoryService.Presentation.Requests;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,18 +10,12 @@ namespace DirectoryService.Presentation.Controllers
     public class LocationController : ControllerBase
     {
         [HttpPost]
-        public async Task<IActionResult> AddLocation(
+        public async Task<EndpointResult<Guid>> AddLocation(
             [FromBody] AddLocationRequest request,
             [FromServices] IAddLocationHandler handler,
             CancellationToken cancellationToken)
         {
-            var result = await handler.Handle(
-                request.ToCommand(),
-                cancellationToken);
-            if (result.IsFailure)
-                return BadRequest(result.Error);
-
-            return Ok(result.Value);
+            return await handler.Handle(request.ToCommand(), cancellationToken);
         }
     }
 }
