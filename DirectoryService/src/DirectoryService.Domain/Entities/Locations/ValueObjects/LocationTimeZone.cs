@@ -13,11 +13,11 @@ namespace DirectoryService.Domain.Entities.Locations.ValueObjects
 
         public string TimeZone { get; }
 
-        public static Result<LocationTimeZone> Create(string timeZone)
+        public static Result<LocationTimeZone, Error> Create(string timeZone)
         {
             if (string.IsNullOrWhiteSpace(timeZone) ||
                 !Regex.IsMatch(timeZone, Constants.TIME_ZONE_REGEX_PATTERN))
-                return Result.Failure<LocationTimeZone>("Incorrect TimeZone format.");
+                return GeneralErrors.ValueIsInvalid("Time zone is invalid");
 
             return new LocationTimeZone(timeZone);
         }

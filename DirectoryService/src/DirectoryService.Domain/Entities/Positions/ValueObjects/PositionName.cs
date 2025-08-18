@@ -12,12 +12,13 @@ namespace DirectoryService.Domain.Entities.Positions.ValueObjects
 
         public string Name { get; }
 
-        public static Result<PositionName> Create(string name)
+        public static Result<PositionName, Error> Create(string name)
         {
             if (string.IsNullOrWhiteSpace(name) ||
                 name.Length < Constants.MIN_POSITION_NAME_LENGTH ||
                 name.Length > Constants.MAX_POSITION_NAME_LENGTH)
-                return Result.Failure<PositionName>("Position name cannot be empty or whitespace.");
+                return GeneralErrors.ValueIsRequired("Position name is invalid");
+
             return new PositionName(name);
         }
     }

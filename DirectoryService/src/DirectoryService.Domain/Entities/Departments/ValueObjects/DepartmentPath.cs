@@ -13,12 +13,13 @@ namespace DirectoryService.Domain.Entities.Departments.ValueObjects
 
         public string Path { get; }
 
-        public static Result<DepartmentPath> Create(string path)
+        public static Result<DepartmentPath, Error> Create(string path)
         {
             if (string.IsNullOrWhiteSpace(path) ||
                 !Regex.IsMatch(path, Constants.DEPARTMENT_PATH_REGEX_PATTERN))
-                return Result.Failure<DepartmentPath>("Incorrect path format.");
-            return Result.Success(new DepartmentPath(path));
+                    return GeneralErrors.ValueIsInvalid("Department Path");
+
+            return new DepartmentPath(path);
         }
     }
 }

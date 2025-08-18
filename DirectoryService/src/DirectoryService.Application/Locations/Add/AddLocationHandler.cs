@@ -1,6 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
+using DirectoryService.Application.Extensions;
 using DirectoryService.Domain.Entities.Locations;
 using DirectoryService.Domain.Entities.Locations.ValueObjects;
+using DirectoryService.Domain.Shared;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 
@@ -22,7 +24,7 @@ namespace DirectoryService.Application.Locations.Add
             _validator = validator;
         }
 
-        public async Task<Result<Guid>> Handle(
+        public async Task<Result<Guid, Errors>> Handle(
             AddLocationCommand command,
             CancellationToken cancellationToken)
         {
@@ -35,7 +37,7 @@ namespace DirectoryService.Application.Locations.Add
                     .ForEach(e =>
                     _logger.LogError(e.ErrorMessage));
 
-                return Result.Failure<Guid>("Command validation error.");
+                return validationResult.ToErrors();
             }
 
             var isLocationNameAvailable = await _locationRepository
@@ -47,8 +49,9 @@ namespace DirectoryService.Application.Locations.Add
                 _logger.LogError(
                     "Location name '{LocationName}' is already taken.",
                     command.Name);
-                return Result.Failure<Guid>(
-                    $"Location name '{command.Name}' is already taken.");
+
+                return GeneralErrors.AlreadyExist(command.Name, "name")
+                    .ToErrors();
             }
 
             var isLocationAddressExists = await _locationRepository
@@ -64,8 +67,11 @@ namespace DirectoryService.Application.Locations.Add
                     command.LocationAddresDto.State,
                     command.LocationAddresDto.City,
                     command.LocationAddresDto.Address);
-                return Result.Failure<Guid>(
-                    "Location address already exists.");
+
+                return GeneralErrors.AlreadyExist(
+                    $"{command.LocationAddresDto.State} " +
+                    $"{command.LocationAddresDto.City} " +
+                    $"{command.LocationAddresDto.Address}", "adress").ToErrors();
             }
 
             var location = new Location(
@@ -80,7 +86,7 @@ namespace DirectoryService.Application.Locations.Add
             var result = await _locationRepository
                 .AddAsync(location, cancellationToken);
             if (result.IsFailure)
-                return Result.Failure<Guid>(result.Error);
+                return result.Error.ToErrors();
 
             return location.Id;
         }

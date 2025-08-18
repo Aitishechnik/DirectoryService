@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using DirectoryService.Application.Locations;
 using DirectoryService.Domain.Entities.Locations;
+using DirectoryService.Domain.Shared;
 using DirectoryService.Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +16,7 @@ namespace DirectoryService.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<UnitResult<string>> AddAsync(
+        public async Task<UnitResult<Error>> AddAsync(
             Location location,
             CancellationToken cancellationToken)
         {
@@ -24,12 +25,11 @@ namespace DirectoryService.Infrastructure.Repositories
                 await _dbContext.Locations.AddAsync(location, cancellationToken);
                 await _dbContext.SaveChangesAsync(cancellationToken);
 
-                return UnitResult.Success<string>();
+                return UnitResult.Success<Error>();
             }
             catch (Exception ex)
             {
-                return UnitResult.Failure(
-                    $"An error occurred while adding the location: {ex.Message}");
+                return Error.Failure(null, ex.Message);
             }
         }
 

@@ -1,10 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
+using DirectoryService.Domain.Shared;
 
 namespace DirectoryService.Application.Locations.Add
 {
     public interface IAddLocationHandler
     {
-        Task<Result<Guid>> Handle(
+        Task<Result<Guid, Errors>> Handle(
             AddLocationCommand command,
             CancellationToken cancellationToken);
     }
