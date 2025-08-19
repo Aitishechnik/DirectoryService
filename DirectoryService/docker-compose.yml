@@ -11,6 +11,15 @@
       - "5436:5432"
     volumes:
       - pg_data_directory_service:/var/lib/postgresql/data
+  seq:
+    image: datalust/seq:latest
+    container_name: ds_seq
+    restart: always
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - 5342:5341
+      - 8082:80
 
 volumes:
   pg_data_directory_service:

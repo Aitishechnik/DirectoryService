@@ -1,5 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
-using DirectoryService.Application.Extensions;
+using DirectoryService.Application.Validation;
 using DirectoryService.Domain.Entities.Locations;
 using DirectoryService.Domain.Entities.Locations.ValueObjects;
 using DirectoryService.Domain.Shared;
@@ -28,16 +28,15 @@ namespace DirectoryService.Application.Locations.Add
             AddLocationCommand command,
             CancellationToken cancellationToken)
         {
-            var validationResult =
-                await _validator
+            var validationResult = await _validator
                 .ValidateAsync(command, cancellationToken);
             if (!validationResult.IsValid)
             {
-                validationResult.Errors
-                    .ForEach(e =>
-                    _logger.LogError(e.ErrorMessage));
+                var errors = validationResult.ToList();
 
-                return validationResult.ToErrors();
+                errors.ToList().ForEach(e => _logger.LogError("{code} {message} {type} {field}", e.Code, e.Message, e.Type, e.InvalidField));
+
+                return errors;
             }
 
             var isLocationNameAvailable = await _locationRepository

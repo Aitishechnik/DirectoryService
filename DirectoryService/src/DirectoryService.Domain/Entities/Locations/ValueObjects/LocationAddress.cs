@@ -27,11 +27,11 @@ namespace DirectoryService.Domain.Entities.Locations.ValueObjects
             string address)
         {
             if(string.IsNullOrWhiteSpace(address))
-                return GeneralErrors.ValueIsRequired("Address is empty");
+                return GeneralErrors.ValueIsRequired("Address");
             if (string.IsNullOrWhiteSpace(city))
-                return GeneralErrors.ValueIsRequired("City is empty");
+                return GeneralErrors.ValueIsRequired("City");
             if (string.IsNullOrWhiteSpace(state))
-                return GeneralErrors.ValueIsRequired("State is empty");
+                return GeneralErrors.ValueIsRequired("State");
 
             return new LocationAddress(state, city, address);
         }
