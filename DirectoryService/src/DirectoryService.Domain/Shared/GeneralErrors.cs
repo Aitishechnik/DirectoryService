@@ -17,7 +17,7 @@
         public static Error ValueIsRequired(string? name = null)
         {
             var lable = name ?? " ";
-            return Error.Validation("length.is.invalid", $"invalid {lable} length");
+            return Error.Validation("length.is.invalid", $"Invalid {lable} length");
         }
 
         public static Error AlreadyDeleted(Guid id)

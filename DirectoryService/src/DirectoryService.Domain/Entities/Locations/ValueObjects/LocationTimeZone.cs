@@ -17,7 +17,7 @@ namespace DirectoryService.Domain.Entities.Locations.ValueObjects
         {
             if (string.IsNullOrWhiteSpace(timeZone) ||
                 !Regex.IsMatch(timeZone, Constants.TIME_ZONE_REGEX_PATTERN))
-                return GeneralErrors.ValueIsInvalid("Time zone is invalid");
+                return GeneralErrors.ValueIsInvalid("TimeZone");
 
             return new LocationTimeZone(timeZone);
         }

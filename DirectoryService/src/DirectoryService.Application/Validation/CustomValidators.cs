@@ -20,5 +20,11 @@ namespace DirectoryService.Application.Validation
                 context.AddFailure(result.Error.Serialize());
             });
         }
+
+        public static IRuleBuilderOptions<T, TProperty> WithError<T, TProperty>(
+            this IRuleBuilderOptions<T, TProperty> rule, Error error)
+        {
+            return rule.WithMessage(error.Serialize());
+        }
     }
 }

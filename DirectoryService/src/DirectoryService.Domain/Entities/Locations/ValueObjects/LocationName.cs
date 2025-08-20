@@ -17,7 +17,7 @@ namespace DirectoryService.Domain.Entities.Locations.ValueObjects
             if (string.IsNullOrWhiteSpace(name) ||
                 name.Length < Constants.MIN_LOCATION_NAME_LENGTH ||
                 name.Length > Constants.MAX_LOCATION_NAME_LENGTH)
-                return GeneralErrors.ValueIsInvalid("Location name is invalid");
+                return GeneralErrors.ValueIsInvalid("LocationName");
 
             return new LocationName(name);
         }
