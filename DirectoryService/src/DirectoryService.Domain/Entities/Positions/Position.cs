@@ -7,12 +7,10 @@ public class Position
 {
     public Position(
         PositionName name,
-        PositionDescription? description,
-        bool isActive)
+        PositionDescription? description)
     {
         Name = name;
         Description = description;
-        IsActive = isActive;
         CreatedAt = DateTime.UtcNow;
     }
 
@@ -30,8 +28,7 @@ public class Position
 
     public bool IsActive { get; private set; } = true;
 
-    public DateTime CreatedAt { get; private set; }
+    public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
 
-    public DateTime UpdatedAt { get; private set; }
-
+    public DateTime UpdatedAt { get; private set; } = DateTime.UtcNow;
 }

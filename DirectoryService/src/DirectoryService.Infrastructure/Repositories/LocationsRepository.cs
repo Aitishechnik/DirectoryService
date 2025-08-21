@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DirectoryService.Infrastructure.Repositories
 {
-    public class LocationsRepository : ILocationRepository
+    public class LocationsRepository : ILocationsRepository
     {
         private readonly DirectoryServiceDbContext _dbContext;
 
@@ -31,6 +31,22 @@ namespace DirectoryService.Infrastructure.Repositories
             {
                 return Error.Failure(null, ex.Message);
             }
+        }
+
+        public async Task<Result<List<Location>, Error>> GetLocationsById(
+            List<Guid> locationsIds,
+            CancellationToken cancellationToken)
+        {
+            var distinctLocations = locationsIds.Distinct().ToList();
+
+            var locations = await _dbContext.Locations
+                .Where(l => distinctLocations.Contains(l.Id))
+                .ToListAsync(cancellationToken);
+
+            if (distinctLocations.Count != locations.Count)
+                return GeneralErrors.ValueIsInvalid("LocationName");
+
+            return locations;
         }
 
         public async Task<bool> IsLocationAddressExistsAsync(

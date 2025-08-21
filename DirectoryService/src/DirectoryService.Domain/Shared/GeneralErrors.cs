@@ -1,4 +1,6 @@
-﻿namespace DirectoryService.Domain.Shared
+﻿using System.Windows.Markup;
+
+namespace DirectoryService.Domain.Shared
 {
     public static class GeneralErrors
     {
@@ -28,6 +30,13 @@
         public static Error AlreadyExist(string parameter, string parameterName)
         {
             return Error.Validation("record.already.exist", $"Record with {parameterName} {parameter} is already exist");
+        }
+
+        public static Error ValuesAreNotDistinct(string collectionName)
+        {
+            return Error.Validation(
+                "values.are.not.distinct",
+                $"Values in {collectionName} are not distinct");
         }
     }
 }

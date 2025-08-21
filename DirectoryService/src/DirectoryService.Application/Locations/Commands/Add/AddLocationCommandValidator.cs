@@ -2,7 +2,7 @@
 using DirectoryService.Domain.Entities.Locations.ValueObjects;
 using FluentValidation;
 
-namespace DirectoryService.Application.Locations.Add
+namespace DirectoryService.Application.Locations.Commands.Add
 {
     public class AddLocationCommandValidator : AbstractValidator<AddLocationCommand>
     {

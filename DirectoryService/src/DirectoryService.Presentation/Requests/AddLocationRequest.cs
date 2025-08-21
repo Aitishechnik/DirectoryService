@@ -1,4 +1,4 @@
-﻿using DirectoryService.Application.Locations.Add;
+﻿using DirectoryService.Application.Locations.Commands.Add;
 using DirectoryService.Contracts.Dtos;
 
 namespace DirectoryService.Presentation.Requests
