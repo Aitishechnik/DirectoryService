@@ -2,7 +2,6 @@
 
 namespace DirectoryService.Presentation.Response
 {
-
     public record Envelope<T>
     {
         public T? Result { get; }

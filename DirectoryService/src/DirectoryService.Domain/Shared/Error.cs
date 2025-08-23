@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace DirectoryService.Domain.Shared
+﻿namespace DirectoryService.Domain.Shared
 {
     public class Error
     {
@@ -38,8 +36,6 @@ namespace DirectoryService.Domain.Shared
         public static Error Conflict(string? code, string message) =>
             new(code ?? "value.is.conflict", message, ErrorType.CONFLICT);
 
-        public string Serialize() => string.Join(SEPARATOR, Code, Message, Type);
-
         public static Error Deserialize(string serialized)
         {
             var parts = serialized.Split(SEPARATOR);
@@ -52,6 +48,8 @@ namespace DirectoryService.Domain.Shared
 
             return new Error(parts[0], parts[1], type);
         }
+
+        public string Serialize() => string.Join(SEPARATOR, Code, Message, Type);
 
         public Errors ToErrors() => this;
 

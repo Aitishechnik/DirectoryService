@@ -1,6 +1,8 @@
-﻿using DirectoryService.Domain.Entities.Departments.ValueObjects;
+﻿using CSharpFunctionalExtensions;
+using DirectoryService.Domain.Entities.Departments.ValueObjects;
 using DirectoryService.Domain.Entities.Locations;
 using DirectoryService.Domain.Entities.Positions;
+using DirectoryService.Domain.Shared;
 
 namespace DirectoryService.Domain.Entities.Departments;
 
@@ -12,16 +14,16 @@ public class Department
         Guid? parentId,
         DepartmentPath path,
         short debth,
-        int childerCount,
-        DateTime createAt)
+        List<Location> locatoins)
     {
         Name = name;
         Identifier = identifier;
         ParentId = parentId;
         Path = path;
         Depth = debth;
-        ChildrenCount = childerCount;
-        CreatedAt = createAt;
+        ChildrenCount = _children.Count;
+        _locations = locatoins;
+        CreatedAt = DateTime.UtcNow;
     }
 
     private Department() { }
@@ -50,11 +52,66 @@ public class Department
 
     private List<Position> _positions = [];
 
-    public int ChildrenCount { get; private set; } = default!;
+    public int ChildrenCount { get; private set; }
 
     public bool IsActive { get; private set; } = true;
 
     public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
 
     public DateTime UpdatedAt { get; private set; } = DateTime.UtcNow;
+
+    public UnitResult<Error> SetLocations(List<Location> locations)
+    {
+        if(locations is null || locations.Count == 0)
+            return GeneralErrors.ValueIsInvalid("Locations");
+
+        if(_locations.Count == 0)
+        {
+            _locations = locations;
+            return Result.Success<Error>();
+        }
+
+        var repitableLocation = locations.FirstOrDefault(
+            l => _locations.Contains(l));
+
+        if (repitableLocation is not null)
+        {
+            return GeneralErrors.AlreadyExist(
+                repitableLocation.Name.Name, "Location");
+        }
+
+        _locations.AddRange(locations);
+
+        return Result.Success<Error>();
+    }
+
+    public UnitResult<Error> SetPositions(
+        List<Position> positions)
+    {
+        if(_positions.Count == 0)
+        {
+            _positions = positions;
+            return Result.Success<Error>();
+        }
+
+        var repitiblePosition = positions.FirstOrDefault(
+            l => _positions.Contains(l));
+
+        if(repitiblePosition is not null)
+        {
+            return GeneralErrors.AlreadyExist(
+                repitiblePosition.Name.Name, "Position");
+        }
+
+        _positions.AddRange(positions);
+
+        return Result.Success<Error>();
+    }
+
+    public bool IsIdentifierUniqueAmongChildren(
+        DepartmentIdentifier departmentIdentifier)
+    {
+        return _children.All(
+            d => d.Identifier != departmentIdentifier);
+    }
 }

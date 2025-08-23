@@ -1,5 +1,5 @@
-﻿using DirectoryService.Domain.Shared;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
+using DirectoryService.Domain.Shared;
 
 namespace DirectoryService.Presentation.Response
 {

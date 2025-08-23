@@ -1,12 +1,12 @@
 ﻿using CSharpFunctionalExtensions;
 using DirectoryService.Domain.Shared;
 
-namespace DirectoryService.Application.Locations.Add
+namespace DirectoryService.Application.Departments.Commands.Add
 {
-    public interface IAddLocationHandler
+    public interface IAddDepartmentHandler
     {
         Task<Result<Guid, Errors>> Handle(
-            AddLocationCommand command,
+            AddDepartmentCommand command,
             CancellationToken cancellationToken);
     }
 }

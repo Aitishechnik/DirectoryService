@@ -4,9 +4,11 @@ using DirectoryService.Domain.Shared;
 
 namespace DirectoryService.Application.Locations
 {
-    public interface ILocationRepository
+    public interface ILocationsRepository
     {
-        Task<UnitResult<Error>> AddAsync(Location location, CancellationToken cancellationToken);
+        Task<UnitResult<Error>> AddAsync(
+            Location location,
+            CancellationToken cancellationToken);
 
         Task<bool> IsLocationNameAvailibleAsync(
             string locationName,
@@ -16,6 +18,10 @@ namespace DirectoryService.Application.Locations
             string state,
             string city,
             string address,
+            CancellationToken cancellationToken);
+
+        Task<Result<List<Location>, Error>> GetLocationsById(
+            List<Guid> locationIds,
             CancellationToken cancellationToken);
     }
 }

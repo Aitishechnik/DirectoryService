@@ -23,7 +23,7 @@ public static class Constants
     public const string IDENTIFIER_REGEX_PATTERN = @"^[a-z]+$";
 
     public const string TIME_ZONE_REGEX_PATTERN =
-        @"^(?:[A-Za-z0-9]+(?:[-_A-Za-z0-9+.]*[A-Za-z0-9])?)(?:/(?:[A-Za-z0-9]+(?:[-_A-Za-z0-9+.]*[A-Za-z0-9])?))*$";
+        @"^(?:UTC|GMT)(?:\+|-)(?:0?\d|1\d|2[0-3])(?::[0-5][0-9])?$";
 
     public static string DEPARTMENT_PATH_REGEX_PATTERN = @"^(?!\.)([a-z0-9_-]+)(\.[a-z0-9_-]+)*$";
 }

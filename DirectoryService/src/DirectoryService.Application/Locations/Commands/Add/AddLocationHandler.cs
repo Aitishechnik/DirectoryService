@@ -6,16 +6,16 @@ using DirectoryService.Domain.Shared;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 
-namespace DirectoryService.Application.Locations.Add
+namespace DirectoryService.Application.Locations.Commands.Add
 {
     public class AddLocationHandler : IAddLocationHandler
     {
-        private readonly ILocationRepository _locationRepository;
+        private readonly ILocationsRepository _locationRepository;
         private readonly ILogger<AddLocationHandler> _logger;
         private readonly IValidator<AddLocationCommand> _validator;
 
         public AddLocationHandler(
-            ILocationRepository locationRepository,
+            ILocationsRepository locationRepository,
             ILogger<AddLocationHandler> logger,
             IValidator<AddLocationCommand> validator)
         {
@@ -34,7 +34,9 @@ namespace DirectoryService.Application.Locations.Add
             {
                 var errors = validationResult.ToList();
 
-                errors.ToList().ForEach(e => _logger.LogError("{code} {message} {type} {field}", e.Code, e.Message, e.Type, e.InvalidField));
+                errors.ToList().ForEach(
+                    e => _logger.LogError(
+                        "{code} {message} {type} {field}", e.Code, e.Message, e.Type, e.InvalidField));
 
                 return errors;
             }
@@ -79,8 +81,7 @@ namespace DirectoryService.Application.Locations.Add
                     command.LocationAddresDto.State,
                     command.LocationAddresDto.City,
                     command.LocationAddresDto.Address).Value,
-                LocationTimeZone.Create(command.TimeZone).Value,
-                DateTime.UtcNow);
+                LocationTimeZone.Create(command.TimeZone).Value);
 
             var result = await _locationRepository
                 .AddAsync(location, cancellationToken);

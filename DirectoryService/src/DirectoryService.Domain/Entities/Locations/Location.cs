@@ -8,13 +8,12 @@ public class Location
     public Location(
         LocationName name,
         LocationAddress address,
-        LocationTimeZone timezone,
-        DateTime createdAt)
+        LocationTimeZone timezone)
     {
         Name = name;
         Address = address;
         Timezone = timezone;
-        CreatedAt = createdAt;
+        CreatedAt = DateTime.UtcNow;
     }
 
     private Location() { }
