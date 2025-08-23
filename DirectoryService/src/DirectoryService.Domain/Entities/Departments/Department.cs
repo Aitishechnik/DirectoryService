@@ -13,7 +13,8 @@ public class Department
         DepartmentIdentifier identifier,
         Guid? parentId,
         DepartmentPath path,
-        short debth)
+        short debth,
+        List<Location> locatoins)
     {
         Name = name;
         Identifier = identifier;
@@ -21,6 +22,7 @@ public class Department
         Path = path;
         Depth = debth;
         ChildrenCount = _children.Count;
+        _locations = locatoins;
         CreatedAt = DateTime.UtcNow;
     }
 

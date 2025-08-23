@@ -3,6 +3,15 @@ using DirectoryService.Presentation.Response;
 
 namespace DirectoryService.Presentation.Middleware
 {
+    public static class ExceptionMiddlewareExtensions
+    {
+        public static IApplicationBuilder UseExceptionMiddleware(
+            this IApplicationBuilder builder)
+        {
+            return builder.UseMiddleware<ExceptionMiddleware>();
+        }
+    }
+
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;
@@ -32,15 +41,6 @@ namespace DirectoryService.Presentation.Middleware
 
                 await context.Response.WriteAsJsonAsync(envelop);
             }
-        }
-    }
-
-    public static class ExceptionMiddlewareExtensions
-    {
-        public static IApplicationBuilder UseExceptionMiddleware(
-            this IApplicationBuilder builder)
-        {
-            return builder.UseMiddleware<ExceptionMiddleware>();
         }
     }
 }

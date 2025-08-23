@@ -85,10 +85,8 @@ namespace DirectoryService.Application.Departments.Commands.Add
                     command.ParentId,
                     DepartmentPath.Create(
                         parentDepartment.Value.Path.Path + '.' + command.Identifier).Value,
-                    (short)(parentDepartment.Value.Depth + 1));
-
-                department.SetLocations(locationsResult.Value);
-
+                    (short)(parentDepartment.Value.Depth + 1),
+                    locationsResult.Value);
             }
             else
             {
@@ -97,9 +95,8 @@ namespace DirectoryService.Application.Departments.Commands.Add
                     DepartmentIdentifier.Create(command.Identifier).Value,
                     null,
                     DepartmentPath.Create(command.Identifier).Value,
-                    0);
-
-                department.SetLocations(locationsResult.Value);
+                    0,
+                    locationsResult.Value);
             }
 
             var result = await _departmentsRepository
