@@ -1,4 +1,5 @@
 ﻿using DirectoryService.Application.Departments.Commands.Add;
+using DirectoryService.Application.Departments.Commands.UpdateLocations;
 using DirectoryService.Application.Locations.Commands.Add;
 using DirectoryService.Application.Positions.Commands.Add;
 using FluentValidation;
@@ -16,6 +17,7 @@ namespace DirectoryService.Application
             services.AddScoped<IAddLocationHandler, AddLocationHandler>();
             services.AddScoped<IAddDepartmentHandler, AddDepartmentHandler>();
             services.AddScoped<IAddPositionHandler, AddPositionHandler>();
+            services.AddScoped<IUpdateLocationsHandler, UpdateLocationsHandler>();
 
             return services;
         }

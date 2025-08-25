@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using DirectoryService.Application.Database;
 using DirectoryService.Application.Locations;
 using DirectoryService.Application.Validation;
 using DirectoryService.Domain.Entities.Departments;
@@ -11,17 +12,20 @@ namespace DirectoryService.Application.Departments.Commands.Add
 {
     public class AddDepartmentHandler : IAddDepartmentHandler
     {
+        private readonly ITransactionManager _transactionManager;
         private readonly IDepartmentsRepository _departmentsRepository;
         private readonly ILocationsRepository _locationsRepository;
         private readonly ILogger<AddDepartmentHandler> _logger;
         private readonly IValidator<AddDepartmentCommand> _validator;
 
         public AddDepartmentHandler(
+            ITransactionManager transactionManager,
             IDepartmentsRepository departmentsRepository,
             ILocationsRepository locationsRepository,
             ILogger<AddDepartmentHandler> logger,
             IValidator<AddDepartmentCommand> validator)
         {
+            _transactionManager = transactionManager;
             _departmentsRepository = departmentsRepository;
             _locationsRepository = locationsRepository;
             _logger = logger;
@@ -56,21 +60,35 @@ namespace DirectoryService.Application.Departments.Commands.Add
 
             Department department;
 
+            Department? parentDepartment = default;
+
+            var transactionResult = await _transactionManager
+                .BeginTransactionAsync(cancellationToken);
+            if (transactionResult.IsFailure)
+            {
+                _logger.LogError(transactionResult.Error.Message);
+                return transactionResult.Error.ToErrors();
+            }
+
+            using var transaction = transactionResult.Value;
+
             if (command.ParentId is not null)
             {
-                var parentDepartment = await _departmentsRepository
+                var parentDepartmentResult = await _departmentsRepository
                     .GetDepartmentById(
                         (Guid)command.ParentId,
                         cancellationToken);
 
-                if (parentDepartment.IsFailure)
+                if (parentDepartmentResult.IsFailure)
                 {
-                    _logger.LogError(parentDepartment.Error.Message);
+                    _logger.LogError(parentDepartmentResult.Error.Message);
 
-                    return parentDepartment.Error.ToErrors();
+                    return parentDepartmentResult.Error.ToErrors();
                 }
 
-                if(!parentDepartment.Value
+                parentDepartment = parentDepartmentResult.Value;
+
+                if (!parentDepartment
                     .IsIdentifierUniqueAmongChildren(
                     DepartmentIdentifier.Create(command.Identifier).Value))
                 {
@@ -84,8 +102,8 @@ namespace DirectoryService.Application.Departments.Commands.Add
                     DepartmentIdentifier.Create(command.Identifier).Value,
                     command.ParentId,
                     DepartmentPath.Create(
-                        parentDepartment.Value.Path.Path + '.' + command.Identifier).Value,
-                    (short)(parentDepartment.Value.Depth + 1),
+                        parentDepartment.Path.Path + '.' + command.Identifier).Value,
+                    (short)(parentDepartmentResult.Value.Depth + 1),
                     locationsResult.Value);
             }
             else
@@ -105,6 +123,23 @@ namespace DirectoryService.Application.Departments.Commands.Add
             {
                 _logger.LogError(result.Error.Message);
                 return result.Error.ToErrors();
+            }
+
+            if(parentDepartment is not null)
+                parentDepartment.IncrementChildnenCount();
+
+            var saveChangesResult = await _transactionManager.SaveChangesAsync(cancellationToken);
+            if (saveChangesResult.IsFailure)
+            {
+                _logger.LogError(saveChangesResult.Error.Message);
+                return saveChangesResult.Error.ToErrors();
+            }
+
+            var commitResult = transaction.Commit();
+            if (commitResult.IsFailure)
+            {
+                _logger.LogError(commitResult.Error.Message);
+                return commitResult.Error.ToErrors();
             }
 
             _logger.LogInformation(
