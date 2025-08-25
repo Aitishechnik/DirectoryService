@@ -23,26 +23,11 @@ namespace DirectoryService.Infrastructure.Repositories
             try
             {
                 await _dbContext.AddAsync(department, cancellationToken);
-                await _dbContext.SaveChangesAsync(cancellationToken);
                 return Result.Success<Error>();
             }
             catch (Exception ex)
             {
                 return Error.Failure("fail.to.add.department", ex.Message);
-            }
-        }
-
-        public async Task<UnitResult<Error>> SaveChangesAsync(
-            CancellationToken cancellationToken)
-        {
-            try
-            {
-                await _dbContext.SaveChangesAsync(cancellationToken);
-                return Result.Success<Error>();
-            }
-            catch (Exception ex)
-            {
-                return Error.Failure("fail.to.update.department", ex.Message);
             }
         }
 

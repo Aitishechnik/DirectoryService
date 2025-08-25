@@ -23,7 +23,7 @@ namespace DirectoryService.Infrastructure.Repositories
             try
             {
                 await _dbContext.Positions.AddAsync(position, cancellationToken);
-                await _dbContext.SaveChangesAsync(cancellationToken);
+
                 return Result.Success<Error>();
             }
             catch (Exception ex)

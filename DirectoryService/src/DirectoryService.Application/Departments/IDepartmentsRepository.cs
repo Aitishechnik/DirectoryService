@@ -14,9 +14,6 @@ namespace DirectoryService.Application.Departments
             Department department,
             CancellationToken cancellationToken);
 
-        Task<UnitResult<Error>> SaveChangesAsync(
-            CancellationToken cancellationToken);
-
         Task<Result<List<Department>, Error>> GetDepartmentsById(
             List<Guid> departmentIds,
             CancellationToken cancellationToken);

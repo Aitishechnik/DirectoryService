@@ -60,7 +60,7 @@ public class Department
 
     public DateTime UpdatedAt { get; private set; } = DateTime.UtcNow;
 
-    public UnitResult<Error> SetLocations(List<Location> locations)
+    public UnitResult<Error> AddLocations(List<Location> locations)
     {
         if(locations is null || locations.Count == 0)
             return GeneralErrors.ValueIsInvalid("Locations");
@@ -85,7 +85,17 @@ public class Department
         return Result.Success<Error>();
     }
 
-    public UnitResult<Error> SetPositions(
+    public UnitResult<Error> UpdateLocations(List<Location> locations)
+    {
+         if (locations is null || locations.Count == 0)
+            return GeneralErrors.ValueIsInvalid("Locations");
+
+         _locations = locations;
+
+         return Result.Success<Error>();
+    }
+
+    public UnitResult<Error> AddPositions(
         List<Position> positions)
     {
         if(_positions.Count == 0)
@@ -107,6 +117,8 @@ public class Department
 
         return Result.Success<Error>();
     }
+
+    public void IncrementChildnenCount() => ChildrenCount++;
 
     public bool IsIdentifierUniqueAmongChildren(
         DepartmentIdentifier departmentIdentifier)
