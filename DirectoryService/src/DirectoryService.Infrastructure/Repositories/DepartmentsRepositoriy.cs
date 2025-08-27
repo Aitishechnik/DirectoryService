@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using DirectoryService.Application.Departments;
 using DirectoryService.Domain.Entities.Departments;
+using DirectoryService.Domain.Entities.Departments.ValueObjects;
 using DirectoryService.Domain.Shared;
 using DirectoryService.Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore;
@@ -23,26 +24,11 @@ namespace DirectoryService.Infrastructure.Repositories
             try
             {
                 await _dbContext.AddAsync(department, cancellationToken);
-                await _dbContext.SaveChangesAsync(cancellationToken);
                 return Result.Success<Error>();
             }
             catch (Exception ex)
             {
                 return Error.Failure("fail.to.add.department", ex.Message);
-            }
-        }
-
-        public async Task<UnitResult<Error>> SaveChangesAsync(
-            CancellationToken cancellationToken)
-        {
-            try
-            {
-                await _dbContext.SaveChangesAsync(cancellationToken);
-                return Result.Success<Error>();
-            }
-            catch (Exception ex)
-            {
-                return Error.Failure("fail.to.update.department", ex.Message);
             }
         }
 
@@ -78,6 +64,12 @@ namespace DirectoryService.Infrastructure.Repositories
             }
 
             return departments;
+        }
+
+        public async Task<bool> IsIndentifierUnique(string departmentIdentifier)
+        {
+            return await _dbContext.Departments.AllAsync(
+                d => d.Identifier.Identifier != departmentIdentifier);
         }
     }
 }

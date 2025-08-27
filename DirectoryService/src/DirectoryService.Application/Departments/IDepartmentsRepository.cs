@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using DirectoryService.Domain.Entities.Departments;
+using DirectoryService.Domain.Entities.Departments.ValueObjects;
 using DirectoryService.Domain.Shared;
 
 namespace DirectoryService.Application.Departments
@@ -14,11 +15,10 @@ namespace DirectoryService.Application.Departments
             Department department,
             CancellationToken cancellationToken);
 
-        Task<UnitResult<Error>> SaveChangesAsync(
-            CancellationToken cancellationToken);
-
         Task<Result<List<Department>, Error>> GetDepartmentsById(
             List<Guid> departmentIds,
             CancellationToken cancellationToken);
+
+        Task<bool> IsIndentifierUnique(string departmentIdentifier);
     }
 }

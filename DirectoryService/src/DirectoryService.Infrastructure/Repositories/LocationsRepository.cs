@@ -23,7 +23,6 @@ namespace DirectoryService.Infrastructure.Repositories
             try
             {
                 await _dbContext.Locations.AddAsync(location, cancellationToken);
-                await _dbContext.SaveChangesAsync(cancellationToken);
 
                 return UnitResult.Success<Error>();
             }

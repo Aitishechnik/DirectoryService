@@ -16,7 +16,7 @@ namespace DirectoryService.Infrastructure.Configurations
             builder.Property(d => d.Id)
                 .HasColumnName("id");
 
-            builder.ComplexProperty(d => d.Name, nb =>
+            builder.OwnsOne(d => d.Name, nb =>
             {
                 nb.Property(n => n.Name)
                     .HasColumnName("name")
@@ -24,7 +24,9 @@ namespace DirectoryService.Infrastructure.Configurations
                     .HasMaxLength(Constants.MAX_DEPARTMENT_NAME_LENGTH);
             });
 
-            builder.ComplexProperty(d => d.Identifier, ib =>
+            builder.Navigation(d => d.Name);
+
+            builder.OwnsOne(d => d.Identifier, ib =>
             {
                 ib.Property(i => i.Identifier)
                     .HasColumnName("identifier")
@@ -32,13 +34,17 @@ namespace DirectoryService.Infrastructure.Configurations
                     .HasMaxLength(Constants.MAX_IDENTIFIER_LENGTH);
             });
 
-            builder.ComplexProperty(d => d.Path, pb =>
+            builder.Navigation(d => d.Identifier);
+
+            builder.OwnsOne(d => d.Path, pb =>
             {
                 pb.Property(p => p.Path)
                     .HasColumnName("path")
                     .IsRequired()
                     .HasMaxLength(Constants.MAX_DEPARTMENT_NAME_LENGTH);
             });
+
+            builder.Navigation(d => d.Path);
 
             builder.Property(d => d.Depth)
                 .HasColumnName("depth")

@@ -29,4 +29,23 @@ namespace DirectoryService.Presentation.EndpointResults
             await httpContext.Response.WriteAsJsonAsync(envelope, jsonOptions);
         }
     }
+
+    public sealed class SuccessResult : IResult
+    {
+        public async Task ExecuteAsync(HttpContext httpContext)
+        {
+            ArgumentNullException.ThrowIfNull(httpContext);
+
+            var envelope = Envelope.Ok();
+
+            httpContext.Response.StatusCode = (int)HttpStatusCode.OK;
+
+            var jsonOptions = httpContext.RequestServices
+                .GetRequiredService<IOptions<JsonOptions>>()
+                .Value.JsonSerializerOptions;
+
+            await httpContext.Response.WriteAsJsonAsync(envelope, jsonOptions);
+        }
+    }
+
 }
