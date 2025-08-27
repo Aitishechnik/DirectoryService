@@ -119,11 +119,4 @@ public class Department
     }
 
     public void IncrementChildnenCount() => ChildrenCount++;
-
-    public bool IsIdentifierUniqueAmongChildren(
-        DepartmentIdentifier departmentIdentifier)
-    {
-        return _children.All(
-            d => d.Identifier != departmentIdentifier);
-    }
 }

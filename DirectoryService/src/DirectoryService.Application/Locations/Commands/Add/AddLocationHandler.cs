@@ -38,9 +38,10 @@ namespace DirectoryService.Application.Locations.Commands.Add
             {
                 var errors = validationResult.ToList();
 
-                errors.ToList().ForEach(
-                    e => _logger.LogError(
-                        "{code} {message} {type} {field}", e.Code, e.Message, e.Type, e.InvalidField));
+                var concatenatedErrors = string.Join("; ", errors.Select(
+                    e => e.Code + " " + e.Message + " " + e.Type + " " + e.InvalidField));
+
+                _logger.LogError(concatenatedErrors);
 
                 return errors;
             }

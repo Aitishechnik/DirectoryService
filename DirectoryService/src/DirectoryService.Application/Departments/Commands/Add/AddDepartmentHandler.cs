@@ -41,9 +41,10 @@ namespace DirectoryService.Application.Departments.Commands.Add
             {
                 var errors = validationResult.ToList();
 
-                errors.ToList().ForEach(
-                    e => _logger.LogError(
-                        "{code} {message} {type} {field}", e.Code, e.Message, e.Type, e.InvalidField));
+                var concatenatedErrors = string.Join("; ", errors.Select(
+                    e => e.Code + " " + e.Message + " " + e.Type + " " + e.InvalidField));
+
+                _logger.LogError(concatenatedErrors);
 
                 return errors;
             }
@@ -56,6 +57,16 @@ namespace DirectoryService.Application.Departments.Commands.Add
             {
                 _logger.LogError(locationsResult.Error.Message);
                 return locationsResult.Error.ToErrors();
+            }
+
+            if(!await _departmentsRepository.IsIndentifierUnique(
+                command.Identifier))
+            {
+                _logger.LogError("DepartmentIdentifier is not unique");
+
+                return GeneralErrors
+                    .AlreadyExist(command.Identifier, "DepartmentIdentifier")
+                    .ToErrors();
             }
 
             Department department;
@@ -87,15 +98,6 @@ namespace DirectoryService.Application.Departments.Commands.Add
                 }
 
                 parentDepartment = parentDepartmentResult.Value;
-
-                if (!parentDepartment
-                    .IsIdentifierUniqueAmongChildren(
-                    DepartmentIdentifier.Create(command.Identifier).Value))
-                {
-                    _logger.LogError("DepartmentIdentidier is not unique");
-                    return GeneralErrors.AlreadyExist(
-                        command.Identifier, "DepartmentIdentidier").ToErrors();
-                }
 
                 department = new Department(
                     DepartmentName.Create(command.Name).Value,

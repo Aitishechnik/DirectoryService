@@ -34,13 +34,16 @@ namespace DirectoryService.Application.Departments.Commands.UpdateLocations
             UpdateLocationsCommand command,
             CancellationToken cancellationToken)
         {
-            var validtnResult = await _validator.ValidateAsync(command);
-            if (!validtnResult.IsValid)
+            var validationResult = await _validator.ValidateAsync(command);
+            if (!validationResult.IsValid)
             {
-                var errors = validtnResult.ToList();
-                errors.ToList().ForEach(
-                    e => _logger.LogError(
-                        "{code} {message} {type} {field}", e.Code, e.Message, e.Type, e.InvalidField));
+                var errors = validationResult.ToList();
+
+                var concatenatedErrors = string.Join("; ", errors.Select(
+                    e => e.Code + " " + e.Message + " " + e.Type + " " + e.InvalidField));
+
+                _logger.LogError(concatenatedErrors);
+
                 return errors;
             }
 

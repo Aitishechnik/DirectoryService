@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using DirectoryService.Application.Departments;
 using DirectoryService.Domain.Entities.Departments;
+using DirectoryService.Domain.Entities.Departments.ValueObjects;
 using DirectoryService.Domain.Shared;
 using DirectoryService.Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore;
@@ -63,6 +64,12 @@ namespace DirectoryService.Infrastructure.Repositories
             }
 
             return departments;
+        }
+
+        public async Task<bool> IsIndentifierUnique(string departmentIdentifier)
+        {
+            return await _dbContext.Departments.AllAsync(
+                d => d.Identifier.Identifier != departmentIdentifier);
         }
     }
 }
